@@ -1,21 +1,38 @@
-# fable-sandbox
+# Fable Sandbox
 
-Prepare the selected source snapshot in GitHub Actions.
+Three browser games built with **Three.js** + **Vite**. Everything is procedural — the worlds, the
+characters, the textures, the music and the sound effects are generated in code. There are no art or
+audio asset files in this repo.
 
-<!-- omgithub:readme:start -->
-## 🚀 Build, play, and remix with OMGithub
+| Folder | Game | Dev server |
+|---|---|---|
+| [`gta_fable5.1/`](gta_fable5.1) | **Fable City** — a GTA-style open world: drive, shoot, get a wanted level | http://localhost:5175 |
+| [`kart_fable5.1/`](kart_fable5.1) | **Fable Kart** — a Mario Kart–style racer: 6 tracks, Grand Prix, Balloon Battle | http://localhost:5176 |
+| [`spiderman_fable5.1/`](spiderman_fable5.1) | **Web-Slinger** — web-swing across a procedural Manhattan, freeflow combat, story missions | http://localhost:5173 |
 
-**Remixed using [OMGithub.com](https://omgithub.com).**
+## Run one
 
-[![OMGithub](https://img.shields.io/badge/OMGithub-Open%20project-orange?style=for-the-badge)](https://omgithub.com/mrbeastbrasiltiktok-droid/fable-sandbox)
-[![GitHub](https://img.shields.io/badge/GitHub-Source-181717?logo=github&style=for-the-badge)](https://github.com/mrbeastbrasiltiktok-droid/fable-sandbox)
+Each folder is a self-contained project. Pick one, install, and start it:
 
-- 🎮 [Open the project](https://omgithub.com/mrbeastbrasiltiktok-droid/fable-sandbox).
-- ✨ [Remix this project](https://omgithub.com/?remix=mrbeastbrasiltiktok-droid%2Ffable-sandbox).
-- 💻 [Explore the source](https://github.com/mrbeastbrasiltiktok-droid/fable-sandbox).
-- 🛠️ [Check build runs](https://github.com/mrbeastbrasiltiktok-droid/fable-sandbox/actions).
-- 🐛 [Report an issue](https://github.com/mrbeastbrasiltiktok-droid/fable-sandbox/issues).
-- 👤 [Explore the creator's projects](https://omgithub.com/mrbeastbrasiltiktok-droid).
-- 🌍 [Create with OMGithub](https://omgithub.com).
-- 🧬 [Explore the remix source](https://github.com/koviq4/fable-sandbox/tree/fa17f04c8edc68dd4ee4a9e58b8d9d3e2325cc6b).
-<!-- omgithub:readme:end -->
+```bash
+cd gta_fable5.1     # or kart_fable5.1, or spiderman_fable5.1
+npm install
+npm run dev
+```
+
+Then open the URL it prints (the ports are in the table above — they don't collide, so you can run
+all three at once in separate terminals).
+
+## Build a static bundle
+
+```bash
+npm run build       # outputs to dist/
+npm run preview     # serve the built bundle locally
+```
+
+`dist/` is a plain static site — drop it on any static host.
+
+## Requirements
+
+Node 18+ and a browser with WebGL2. Each game's own README has the full controls, and
+`DESIGN.md` (in `gta_fable5.1/` and `spiderman_fable5.1/docs/`) has the implementation notes.

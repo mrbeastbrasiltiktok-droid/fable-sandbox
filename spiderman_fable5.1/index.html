@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Web-Slinger — a browser Spider-Man</title>
+  <link rel="stylesheet" href="/src/ui/hud.css" />
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="vitals">
+      <div class="bar health"><div class="fill"></div><span class="label">HEALTH</span></div>
+      <div class="bar focus"><div class="fill"></div><span class="label">FOCUS</span></div>
+      <div id="level"><span id="level-num">LV 1</span><div class="bar xp"><div class="fill"></div></div></div>
+    </div>
+
+    <div id="mission">
+      <div id="mission-title"></div>
+      <div id="mission-desc"></div>
+    </div>
+
+    <div id="speed"><span id="speed-num">0</span><span class="unit">km/h</span></div>
+
+    <div id="waypoint" class="hidden"><div class="diamond"></div><div class="dist"></div></div>
+    <div id="spider-sense" class="hidden"></div>
+    <div id="hit-marker"></div>
+    <div id="alerts"></div>
+    <div id="hint"></div>
+    <div id="context"></div>
+    <div id="controls-panel" class="hidden">
+      <div class="title">CONTROLS <span>C to hide</span></div>
+      <div><kbd>W A S D</kbd>move · steer</div>
+      <div><kbd>RMB</kbd>hold: web-swing</div>
+      <div><kbd>SPACE</kbd>jump · jump-release</div>
+      <div><kbd>E</kbd>zip to where you aim · E again to chain</div>
+      <div><kbd>SHIFT</kbd>sprint · dive</div>
+      <div><kbd>LMB</kbd>attack · dive kick from above</div>
+      <div><kbd>Q</kbd>dodge (on spider-sense)</div>
+      <div><kbd>F</kbd>web-strike</div>
+      <div><kbd>R</kbd>web-shoot (stun)</div>
+      <div><kbd>T</kbd>web-throw</div>
+      <div><kbd>V</kbd>web-yank</div>
+      <div><kbd>G</kbd>finisher · <kbd>H</kbd>heal (Focus)</div>
+      <div><kbd>1</kbd>web bomb · <kbd>P</kbd>photo</div>
+      <div><kbd>TAB</kbd>track crime · <kbd>ESC</kbd>pause</div>
+    </div>
+    <div id="combat-combo" class="hidden"><span id="combo-num">0</span><span>HIT COMBO</span></div>
+    <div id="vignette"></div>
+    <div id="damage-flash"></div>
+    <canvas id="minimap" width="200" height="200"></canvas>
+    <div id="crosshair"></div>
+  </div>
+
+  <!-- Skill choice on level up -->
+  <div id="skills" class="overlay hidden">
+    <h2>LEVEL UP</h2>
+    <p>Choose one upgrade</p>
+    <div id="skill-options"></div>
+  </div>
+
+  <!-- Title / pause -->
+  <div id="menu" class="overlay">
+    <div class="menu-card">
+      <h1><span class="web">WEB</span>-SLINGER</h1>
+      <p class="tag">A browser Spider-Man. Swing, fight, save the city.</p>
+      <button id="btn-play">PLAY</button>
+      <button id="btn-new" class="secondary hidden">NEW GAME</button>
+      <div class="controls">
+        <div><kbd>W A S D</kbd> move / steer</div>
+        <div><kbd>MOUSE</kbd> look</div>
+        <div><kbd>RMB</kbd> hold to web-swing</div>
+        <div><kbd>SPACE</kbd> jump · release web</div>
+        <div><kbd>E</kbd> web-zip to point</div>
+        <div><kbd>LMB</kbd> attack (combo)</div>
+        <div><kbd>Q</kbd> dodge</div>
+        <div><kbd>F</kbd> web-strike enemy</div>
+        <div><kbd>R</kbd> web-shoot (stun) · <kbd>V</kbd> web-yank</div>
+        <div><kbd>T</kbd> web-throw · air trick in mid-air</div>
+        <div><kbd>G</kbd> finisher · <kbd>H</kbd> heal (uses Focus)</div>
+        <div><kbd>SHIFT</kbd> sprint · dive in air</div>
+        <div><kbd>1</kbd> web bomb · <kbd>P</kbd> take photo</div>
+        <div><kbd>TAB</kbd> track crime / job</div>
+        <div><kbd>C</kbd> controls panel · <kbd>O</kbd> AO · <kbd>ESC</kbd> pause</div>
+        <div>🎮 Gamepad: sticks move/look · RT swing · A jump · X attack · B dodge · Y zip</div>
+      </div>
+      <p class="fine">Swinging tip: release near the bottom of the arc to go fast, near the top to go high. Hold <kbd>W</kbd> mid-swing to pull in for a speed boost.</p>
+    </div>
+  </div>
+
+  <div id="loading" class="overlay"><div class="menu-card"><h2>Building New York…</h2></div></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
