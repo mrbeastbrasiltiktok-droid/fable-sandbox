@@ -72,7 +72,7 @@ export class Game {
     this.setupPost();
     this.respawnT = 0; this.wastedT = 0; this.fade = 0;
     addEventListener('resize', () => this.resize());
-    this.hud.notify('Welcome to Fable City. Press F1 for controls.', 5000);
+    this.hud.notify(document.body.classList.contains('touch-mode') ? 'Welcome to Fable City. Tap MAP for things to do.' : 'Welcome to Fable City. Press F1 for controls.', 5000);
   }
   setupPost() {
     const r = this.renderer; const size = new THREE.Vector2(); r.getSize(size);

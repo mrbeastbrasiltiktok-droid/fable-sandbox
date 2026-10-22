@@ -32,6 +32,12 @@ npm run preview     # serve the built bundle locally
 
 `dist/` is a plain static site — drop it on any static host.
 
+## Phones and tablets
+
+All three games detect a touch screen automatically and swap in on-screen controls (a movement stick,
+drag-to-look, and action buttons) with a responsive HUD. No separate build is needed — open the same
+page on a phone or tablet.
+
 ## Requirements
 
 Node 18+ and a browser with WebGL2. Each game's own README has the full controls, and

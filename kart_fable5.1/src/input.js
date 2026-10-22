@@ -7,6 +7,7 @@ export class Input {
     window.addEventListener('blur', () => this.keys.clear());
     this.gp = null;
     this.prevGp = {};
+    this.touchSteer = 0; // analog value from the on-screen stick
     this.mouseL = false; this.mouseLPressed = false; this.mouseRPressed = false;
     window.addEventListener('pointerdown', (e) => { if (e.target.closest && e.target.closest('.menu')) return; if (e.button === 0) { this.mouseL = true; this.mouseLPressed = true; } if (e.button === 2) this.mouseRPressed = true; });
     window.addEventListener('pointerup', (e) => { if (e.button === 0) this.mouseL = false; });
@@ -46,6 +47,7 @@ export class Input {
       if (edge('confirm', b(0))) confirm = true; if (edge('back', b(1))) back = true; if (edge('pause', b(9))) pause = true;
       if (b(8)) rear = true;
     }
+    if (Math.abs(this.touchSteer) > 0.001) steer = this.touchSteer;
     return { steer, throttle, brake, hop, hopPressed, itemHeld, itemPressed, itemBack, rear, pause, confirm, back, up, down, left, right };
   }
   endFrame() { this.pressed.clear(); this.mouseLPressed = false; this.mouseRPressed = false; }

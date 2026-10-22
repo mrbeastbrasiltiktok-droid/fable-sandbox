@@ -35,6 +35,10 @@ Click **PLAY** (pointer lock). Progress (level, skills, story, backpacks, race t
 Context moves: attack (LMB) while airborne above an enemy → **dive kick** shockwave; attack inside the window after a **perfect dodge** → instant counter web-strike.
 | `Tab` | toggle tracking between the story mission and the active crime |
 
+On a phone or tablet the game shows touch controls automatically: the left stick runs, dragging the
+right side looks, and buttons cover swing, attack, jump, zip, dodge, web-strike, web-shoot and heal.
+**II** pauses. Menus and skill choices are tap-friendly.
+
 ## What's in the box
 
 - **Feel** — 120 Hz fixed-step physics with render interpolation, momentum-preserving landing rolls, generative synth score that swells into a beat during fights, adaptive quality (AO and pixel ratio step down if frame time stays high), contextual key prompts.

@@ -17,11 +17,14 @@ import { Missions } from '../missions/Missions.js';
 import { HUD } from '../ui/HUD.js';
 import { Audio } from '../audio/Audio.js';
 
+const TOUCH = (window.matchMedia && matchMedia('(pointer: coarse)').matches) || navigator.maxTouchPoints > 0;
+document.body.classList.toggle('touch-mode', TOUCH);
+
 export class Game {
   constructor(canvas) {
     this.canvas = canvas;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio, TOUCH ? 1.2 : 1.5));
     this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -37,6 +40,7 @@ export class Game {
     this.hud = new HUD();
     this.audio = new Audio();
     this.input = new Input(canvas);
+    this.touch = null;
     this.fx = new FX(this.scene);
     this.env = new Environment(this.scene);
     this.city = new City();
@@ -123,6 +127,7 @@ export class Game {
 
   _loop(now) {
     requestAnimationFrame(this._loop);
+    if (this.touch) this.touch.setActive(!this.paused && !this.uiPaused);
     const raw = Math.min(0.05, (now - this._last) / 1000); this._last = now;
     if (this.paused || this.uiPaused) { this._render(0); return; }
     this.input.pollGamepad();

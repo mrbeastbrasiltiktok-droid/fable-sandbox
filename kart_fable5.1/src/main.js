@@ -11,13 +11,17 @@ import { FIXED_DT, DEFAULT_LAPS } from './config.js';
 import { formatTime } from './utils.js';
 import { AIDriver, BattleAI } from './ai.js';
 import { RNG } from './utils.js';
+import { installTouchControls } from './touch.js';
+
+const TOUCH = (window.matchMedia && matchMedia('(pointer: coarse)').matches) || navigator.maxTouchPoints > 0;
+document.body.classList.toggle('touch-mode', TOUCH);
 
 class App {
   constructor() {
     const root = document.getElementById('app');
     this.debug = new URLSearchParams(location.search).has('debug');
     this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5)); this.renderer.setSize(innerWidth, innerHeight);
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio, TOUCH ? 1.2 : 1.5)); this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping; this.renderer.toneMappingExposure = 1.05;
     this.renderer.domElement.className = 'gl'; root.appendChild(this.renderer.domElement);
@@ -28,6 +32,7 @@ class App {
     this.buildShowroom();
     this.race = null; this.gp = null; this.cc = 150; this.mode = 'race'; this.charIdx = 2; this.trackIdx = 0; this.paused = false;
     this.acc = 0; this.last = performance.now(); this.time = 0;
+    this.touch = TOUCH ? installTouchControls(this) : null;
     this.menu.show('title');
     if (this.debug) { this.dbg = document.createElement('div'); this.dbg.className = 'debug-overlay'; root.appendChild(this.dbg); window.step = (n = 1, keys = {}) => this.debugStep(n, keys); window.app = this; window.__mods = { AIDriver, BattleAI, RNG }; }
     requestAnimationFrame((t) => this.frame(t));
@@ -109,6 +114,7 @@ class App {
   frame(t) {
     requestAnimationFrame((tt) => this.frame(tt));
     let dt = Math.min(0.1, (t - this.last) / 1000); this.last = t; this.time += dt;
+    if (this.touch) this.touch.setActive(!this.menu.screen);
     const inp = this.input.poll();
     if (this.menu.screen) this.menu.handleInput(inp);
     else if (inp.pause && this.race) this.togglePause();

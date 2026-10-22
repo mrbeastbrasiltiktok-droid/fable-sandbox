@@ -27,6 +27,10 @@ Add `?debug` to the URL to run without pointer lock (handy for automation / test
 | Talk / shop | `E` near a person or a shop counter |
 | Map · skip time · ambient occlusion · help | `M` · `T` · `O` · `F1` |
 
+On a phone or tablet the game shows touch controls automatically: the left stick moves, dragging the
+right side looks, and on-screen buttons cover fire, aim, jump, run, use, car, swap and map. Tap items
+in a shop to buy them and press **USE** to leave. **II** pauses.
+
 ## What's in the city
 
 - **Fable City**: a 9×9-block island with Downtown towers, Midtown, the Ironworks docks, Palm Heights beach, Oakvale and

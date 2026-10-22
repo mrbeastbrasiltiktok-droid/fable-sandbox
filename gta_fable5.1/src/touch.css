@@ -1,0 +1,85 @@
+/* Touch UI + phone/tablet layout */
+.touch-ui { position: fixed; inset: 0; z-index: 30; pointer-events: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.touch-ui.hidden { display: none; }
+.touch-help { display: none; }
+.touch-mode .keys { display: none; }
+.touch-mode .touch-help { display: inline; }
+
+.t-look { position: absolute; top: 0; right: 0; width: 62%; height: 100%; pointer-events: auto; touch-action: none; }
+
+.t-joy { position: absolute; left: calc(16px + env(safe-area-inset-left)); bottom: calc(16px + env(safe-area-inset-bottom)); width: 132px; height: 132px; border-radius: 50%; pointer-events: auto; touch-action: none; z-index: 2;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.10), rgba(6,10,20,0.42) 70%);
+  border: 2px solid rgba(255,255,255,0.28); box-shadow: inset 0 0 24px rgba(0,0,0,0.45), 0 6px 24px rgba(0,0,0,0.35); }
+.t-joy.on { border-color: rgba(255,210,74,0.7); }
+.t-knob { position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; will-change: transform;
+  background: radial-gradient(circle at 36% 30%, rgba(255,255,255,0.85), rgba(255,210,74,0.75) 45%, rgba(190,140,20,0.65));
+  border: 2px solid rgba(255,255,255,0.75); box-shadow: 0 4px 14px rgba(0,0,0,0.45); }
+
+.t-btn { position: absolute; pointer-events: auto; touch-action: none; display: flex; align-items: center; justify-content: center; z-index: 2;
+  border-radius: 50%; border: 2px solid rgba(255,255,255,0.42); background: rgba(8,12,22,0.52); color: #fff;
+  font-family: var(--font-ui); font-weight: 700; font-size: 11px; letter-spacing: 0.6px; text-shadow: 0 1px 2px #000;
+  box-shadow: inset 0 0 18px rgba(0,0,0,0.35), 0 4px 14px rgba(0,0,0,0.3); backdrop-filter: blur(3px); transition: transform 0.08s, background 0.08s; }
+.t-btn span { pointer-events: none; }
+.t-btn.on { transform: scale(0.92); background: rgba(255,210,74,0.88); border-color: #fff; color: #16120a; text-shadow: none; }
+
+.t-btn.fire { right: calc(14px + env(safe-area-inset-right)); bottom: calc(16px + env(safe-area-inset-bottom)); width: 88px; height: 88px; font-size: 13px; background: rgba(198,34,34,0.55); border-color: rgba(255,120,110,0.65); }
+.t-btn.aim { right: calc(112px + env(safe-area-inset-right)); bottom: calc(26px + env(safe-area-inset-bottom)); width: 68px; height: 68px; }
+.t-btn.jump { right: calc(18px + env(safe-area-inset-right)); bottom: calc(108px + env(safe-area-inset-bottom)); width: 56px; height: 56px; }
+.t-btn.sprint { right: calc(88px + env(safe-area-inset-right)); bottom: calc(108px + env(safe-area-inset-bottom)); width: 54px; height: 54px; }
+.t-btn.swap { right: calc(152px + env(safe-area-inset-right)); bottom: calc(104px + env(safe-area-inset-bottom)); width: 50px; height: 50px; }
+.t-btn.map { right: calc(20px + env(safe-area-inset-right)); bottom: calc(170px + env(safe-area-inset-bottom)); width: 46px; height: 46px; font-size: 10px; }
+.t-btn.use { right: calc(80px + env(safe-area-inset-right)); bottom: calc(170px + env(safe-area-inset-bottom)); width: 52px; height: 52px; }
+.t-btn.enter { right: calc(142px + env(safe-area-inset-right)); bottom: calc(170px + env(safe-area-inset-bottom)); width: 52px; height: 52px; }
+.t-btn.pause { left: 50%; top: calc(10px + env(safe-area-inset-top)); transform: translateX(-50%); width: 42px; height: 42px; border-radius: 12px; font-size: 13px; }
+.t-btn.pause.on { transform: translateX(-50%) scale(0.94); }
+
+.canvas-touch, .touch-mode canvas#game { touch-action: none; }
+
+/* Phones and touch devices: reflow HUD around the on-screen controls. */
+@media (pointer: coarse), (max-width: 820px) {
+  .touch-mode .controls-bar { display: none; }
+  .touch-mode .minimap { width: 136px; height: 136px; border-width: 2px; }
+  .touch-mode .hud-bl { left: calc(12px + env(safe-area-inset-left)); top: calc(10px + env(safe-area-inset-top)); bottom: auto; }
+  .touch-mode .bars { width: 136px; }
+  .touch-mode .bar { height: 8px; margin-top: 3px; }
+  .touch-mode .hud-tr { top: calc(10px + env(safe-area-inset-top)); right: calc(12px + env(safe-area-inset-right)); }
+  .touch-mode .money { font-size: 24px; }
+  .touch-mode .money-delta { font-size: 16px; }
+  .touch-mode .stars { font-size: 18px; letter-spacing: 2px; }
+  .touch-mode .wicon { font-size: 20px; } .touch-mode .wtext { font-size: 16px; }
+  .touch-mode .clock { font-size: 14px; }
+  .touch-mode .hud-br { right: calc(12px + env(safe-area-inset-right)); top: calc(128px + env(safe-area-inset-top)); bottom: auto; }
+  .touch-mode .hud-br .area { font-size: 26px; }
+  .touch-mode .hud-br .speed { font-size: 22px; }
+  .touch-mode .timer { top: calc(58px + env(safe-area-inset-top)); font-size: 30px; }
+  .touch-mode .objective { bottom: calc(206px + env(safe-area-inset-bottom)); font-size: 14px; max-width: 62vw; white-space: normal; text-align: center; }
+  .touch-mode .hint { bottom: calc(240px + env(safe-area-inset-bottom)); font-size: 13px; }
+  .touch-mode .notice { top: calc(96px + env(safe-area-inset-top)); font-size: 14px; max-width: 74vw; white-space: normal; text-align: center; }
+  .touch-mode .banner { font-size: 52px; }
+  .touch-mode .banner-sub { font-size: 20px; }
+  .touch-mode .shop { right: 50%; top: 50%; transform: translate(50%, -50%); min-width: 0; width: min(92vw, 420px); max-height: 76vh; overflow-y: auto; pointer-events: auto; }
+  .touch-mode .shop .row { cursor: pointer; }
+  .touch-mode.shop-open .t-look { pointer-events: none; }
+  .touch-mode .shop h2 { font-size: 24px; }
+  .touch-mode .help { width: 92vw; max-height: 78vh; overflow-y: auto; font-size: 13px; line-height: 1.6; padding: 16px 18px; }
+  .touch-mode .map-row { flex-direction: column; max-height: 88vh; overflow-y: auto; gap: 10px; }
+  .touch-mode .map-panel { width: min(88vw, 360px); max-height: none; }
+  .touch-mode .bigmap canvas { max-height: 72vh; }
+
+  .touch-mode #overlay { justify-content: flex-start; overflow-y: auto; padding: max(7vh, 24px) calc(16px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left)); text-align: center; }
+  #overlay-title { font-size: clamp(42px, 15vw, 96px); }
+  #overlay-sub { font-size: 15px; letter-spacing: 2px; }
+  #overlay .controls { margin-top: 22px; font-size: 12px; line-height: 1.6; max-width: 92vw; }
+}
+
+/* Very narrow phones: keep sticks and buttons from overlapping */
+@media (max-width: 380px) {
+  .t-joy { width: 112px; height: 112px; }
+  .t-knob { width: 48px; height: 48px; margin: -24px 0 0 -24px; }
+  .t-btn.swap { right: auto; left: calc(12px + env(safe-area-inset-left)); bottom: calc(136px + env(safe-area-inset-bottom)); }
+  .t-btn.enter { right: calc(132px + env(safe-area-inset-right)); }
+  .t-btn.use { right: calc(74px + env(safe-area-inset-right)); }
+  .t-btn.jump, .t-btn.sprint { bottom: calc(110px + env(safe-area-inset-bottom)); }
+  .t-btn.jump { width: 52px; height: 52px; }
+  .touch-mode .money { font-size: 21px; }
+}

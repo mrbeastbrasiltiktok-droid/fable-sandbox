@@ -5,6 +5,7 @@ export class Input {
     this.keys = new Set(); this.pressed = new Set();
     this.mouse = { dx: 0, dy: 0, left: false, right: false, leftPressed: false, wheel: 0 };
     this.locked = false; this.canvas = canvas;
+    this.touchAxis = null; // analog stick from the on-screen controls
     window.addEventListener('keydown', (e) => { if (e.repeat) return; this.keys.add(e.code); this.pressed.add(e.code); if (['Space', 'Tab', 'F1'].includes(e.code)) e.preventDefault(); });
     window.addEventListener('keyup', (e) => this.keys.delete(e.code));
     window.addEventListener('blur', () => { this.keys.clear(); this.mouse.left = this.mouse.right = false; });
@@ -19,6 +20,12 @@ export class Input {
   down(action) { return KEYS[action].some(k => this.keys.has(k)); }
   hit(action) { return KEYS[action].some(k => this.pressed.has(k)); }
   hitCode(code) { return this.pressed.has(code); }
-  axis(neg, pos) { return (this.down(pos) ? 1 : 0) - (this.down(neg) ? 1 : 0); }
+  axis(neg, pos) {
+    const kb = (this.down(pos) ? 1 : 0) - (this.down(neg) ? 1 : 0);
+    if (kb !== 0 || !this.touchAxis) return kb;
+    if (neg === 'left' && pos === 'right') return this.touchAxis.x;
+    if (neg === 'back' && pos === 'forward') return this.touchAxis.y;
+    return 0;
+  }
   endFrame() { this.pressed.clear(); this.mouse.dx = 0; this.mouse.dy = 0; this.mouse.leftPressed = false; this.mouse.wheel = 0; }
 }

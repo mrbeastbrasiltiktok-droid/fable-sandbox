@@ -1,6 +1,9 @@
 import { Game } from './core/Game.js';
 import { installDevHarness } from './core/DevHarness.js';
 import { Missions } from './missions/Missions.js';
+import { installTouchControls } from './ui/touch.js';
+
+const TOUCH = (window.matchMedia && matchMedia('(pointer: coarse)').matches) || navigator.maxTouchPoints > 0;
 
 const canvas = document.getElementById('game');
 const loading = document.getElementById('loading');
@@ -13,6 +16,8 @@ setTimeout(() => {
   try {
     game = new Game(canvas);
     window.game = game; // handy for tuning from the console
+    game.input.touchMode = TOUCH;
+    if (TOUCH) installTouchControls(game);
     if (location.search.includes('dev')) installDevHarness(game);
   } catch (err) {
     loading.querySelector('h2').textContent = 'Failed to start: ' + err.message;

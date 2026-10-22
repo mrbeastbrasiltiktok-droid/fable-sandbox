@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <title>Fable City — GTA-style open world</title>
 <style>
   :root { --font-display: Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Medium', sans-serif; --font-ui: 'Helvetica Neue', Arial, sans-serif; }
@@ -75,16 +75,17 @@
   .help { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); background: rgba(0,0,0,0.78); padding: 22px 30px; border-radius: 10px; font-size: 15px; line-height: 1.9; border: 1px solid rgba(255,255,255,0.2); }
   .help h2 { font-family: var(--font-display); margin: 0 0 8px; color: #ffd24a; letter-spacing: 3px; } .help b { color: #ffd24a; } .help .dim { opacity: 0.75; margin-top: 8px; }
 </style>
+<link rel="stylesheet" href="/src/touch.css" />
 </head>
 <body>
   <canvas id="game"></canvas>
   <div id="overlay">
     <div id="overlay-title">FABLE CITY</div>
-    <div id="overlay-sub">Click to play</div>
+    <div id="overlay-sub">Tap / click to play</div>
     <div class="controls">
-      <b>WASD</b> move · <b>Shift</b> sprint · <b>Space</b> jump / handbrake · <b>Mouse</b> look · <b>F</b> enter / steal car<br/>
-      <b>LMB</b> fire · <b>RMB</b> lock-on aim · <b>1-6 / Q / wheel</b> weapons · <b>E</b> talk / shop · <b>H</b> horn · <b>R</b> radio · <b>M</b> map · <b>T</b> skip time · <b>O</b> AO · <b>F1</b> help<br/>
-      Walk into the glowing markers to start missions. Walk through shop doors to buy guns, food and outfits. Steal cars, outrun the cops, get rich.
+      <span class="keys"><b>WASD</b> move · <b>Shift</b> sprint · <b>Space</b> jump / handbrake · <b>Mouse</b> look · <b>F</b> enter / steal car<br/>
+      <b>LMB</b> fire · <b>RMB</b> lock-on aim · <b>1-6 / Q / wheel</b> weapons · <b>E</b> talk / shop · <b>H</b> horn · <b>R</b> radio · <b>M</b> map · <b>T</b> skip time · <b>O</b> AO · <b>F1</b> help</span>
+      <span class="touch-help">Left stick moves · drag the right side to look. Buttons: fire, aim, jump, run, use, car, swap, map. Walk into the glowing markers to start missions, through shop doors to buy gear. Steal cars, outrun the cops, get rich.</span>
     </div>
   </div>
   <script type="module" src="/src/main.js"></script>

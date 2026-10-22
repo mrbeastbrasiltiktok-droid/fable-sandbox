@@ -1,30 +1,48 @@
 import * as THREE from 'three';
 import { Game } from './game.js';
+import { installTouchControls } from './touch.js';
 
 const canvas = document.getElementById('game');
+const TOUCH = (window.matchMedia && matchMedia('(pointer: coarse)').matches) || navigator.maxTouchPoints > 0;
+document.body.classList.toggle('touch-mode', TOUCH);
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5)); renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, TOUCH ? 1.2 : 1.5)); renderer.setSize(innerWidth, innerHeight);
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
 
 const overlay = document.getElementById('overlay'); const overlayTitle = document.getElementById('overlay-title'); const overlaySub = document.getElementById('overlay-sub');
 const game = new Game(renderer, canvas); window.game = game;
+game.input.touchMode = TOUCH;
+const touch = installTouchControls(game, { onPause: () => pauseGame() });
 // Debug harness (?debug): step the simulation deterministically from the console, e.g. step(60, ['KeyW']).
 window.step = (n, keys = [], mouse = {}) => { for (let i = 0; i < n; i++) { for (const k of keys) { game.input.keys.add(k); if (i === 0) game.input.pressed.add(k); } Object.assign(game.input.mouse, mouse); game.update(1 / 60); } game.input.keys.clear(); game.render(); };
 game.resize();
 
 let started = false;
 const DEBUG = location.search.includes('debug');
+function pauseGame() {
+  game.paused = true;
+  touch.setActive(false);
+  overlayTitle.textContent = 'PAUSED';
+  overlaySub.textContent = 'Tap to resume';
+  overlay.style.display = 'flex';
+}
 function play() {
   game.audio.init(); game.audio.resume();
-  if (DEBUG) { game.input.locked = true; game.input.onLockChange(true); return; }
+  if (DEBUG) { game.input.locked = true; game.input.onLockChange(true); if (TOUCH) touch.setActive(true); return; }
+  if (TOUCH) {
+    game.paused = false; started = true;
+    overlay.style.display = 'none';
+    touch.setActive(true);
+    return;
+  }
   game.input.lock();
 }
 overlay.addEventListener('click', play);
 game.input.onLockChange = (locked) => {
   game.paused = !locked; overlay.style.display = locked ? 'none' : 'flex';
   if (!locked) { overlayTitle.textContent = started ? 'PAUSED' : 'FABLE CITY'; overlaySub.textContent = 'Click to ' + (started ? 'resume' : 'play'); }
-  if (locked) { started = true; game.audio.resume(); }
+  if (locked) { started = true; game.audio.resume(); if (TOUCH) touch.setActive(true); }
 };
 
 let last = performance.now();

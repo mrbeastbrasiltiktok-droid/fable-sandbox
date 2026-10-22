@@ -8,6 +8,8 @@ export class Input {
     this.mouse = { dx: 0, dy: 0, left: false, right: false, leftPressed: false, rightPressed: false, wheel: 0 };
     this.locked = false;
     this.enabled = false;
+    this.touchMode = false;
+    this.touchMove = null;
 
     window.addEventListener('keydown', (e) => {
       if (e.repeat) return;
@@ -70,7 +72,7 @@ export class Input {
   }
 
   lock() { this.enabled = true; this._requestLock(); }
-  _requestLock() { try { const p = this.canvas.requestPointerLock?.(); if (p && p.catch) p.catch(() => {}); } catch (e) { /* not available (iframe / background) */ } }
+  _requestLock() { if (this.touchMode) return; try { const p = this.canvas.requestPointerLock?.(); if (p && p.catch) p.catch(() => {}); } catch (e) { /* not available (iframe / background) */ } }
   unlock() { document.exitPointerLock?.(); }
 
   down(code) { return this.keys.has(code); }
@@ -80,9 +82,11 @@ export class Input {
   takeMouse(btn) { const k = btn + 'Pressed'; const h = this.mouse[k]; this.mouse[k] = false; return h; }
   axis(neg, pos) {
     const kb = (this.down(pos) ? 1 : 0) - (this.down(neg) ? 1 : 0);
-    if (kb !== 0 || !this.gpMove) return kb;
-    if (neg === 'KeyA') return this.gpMove.x;         // stick x → right positive
-    if (neg === 'KeyS') return -this.gpMove.y;        // stick y → forward positive
+    if (kb !== 0) return kb;
+    const m = this.touchMove || this.gpMove;
+    if (!m) return 0;
+    if (neg === 'KeyA') return m.x;                   // stick x → right positive
+    if (neg === 'KeyS') return -m.y;                  // stick y → forward positive
     return 0;
   }
 

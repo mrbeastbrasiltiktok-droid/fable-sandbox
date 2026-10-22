@@ -9,7 +9,13 @@ export class Menu {
   constructor(root, app) {
     this.app = app; this.el = document.createElement('div'); this.el.className = 'menu'; root.appendChild(this.el);
     this.screen = null; this.sel = 0; this.cc = 150; this.mode = 'race'; this.charIdx = 2; this.trackIdx = 0;
-    this.el.addEventListener('click', (e) => { const b = e.target.closest('[data-i]'); if (b) { this.sel = +b.dataset.i; this.render(); this.confirm(); } const nav = e.target.closest('[data-nav]'); if (nav) this[nav.dataset.nav](); });
+    this.el.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-i]');
+      if (b) { this.sel = +b.dataset.i; this.render(); this.confirm(); return; }
+      const nav = e.target.closest('[data-nav]');
+      if (nav) { this[nav.dataset.nav](); return; }
+      if (this.screen === 'title') this.confirm();
+    });
     this.el.addEventListener('mousemove', (e) => { const b = e.target.closest('[data-i]'); if (b && +b.dataset.i !== this.sel) { this.sel = +b.dataset.i; this.render(); } });
   }
   show(screen, data) { this.screen = screen; this.data = data; this.sel = screen === 'chars' ? this.charIdx : screen === 'tracks' ? this.trackIdx : 0; this.el.hidden = false; this.render(); }
@@ -26,7 +32,7 @@ export class Menu {
   render() {
     const s = this.screen; let html = '';
     const opt = (i, label, sub = '') => `<div class="opt ${this.sel === i ? 'sel' : ''}" data-i="${i}"><span>${label}</span>${sub ? `<small>${sub}</small>` : ''}</div>`;
-    if (s === 'title') html = `<div class="title-wrap"><div class="logo"><span>FABLE</span><span class="k">KART</span></div><div class="tag">Drift. Boost. Bananas.</div><div class="press">Press <kbd>Enter</kbd> or click to start</div><div class="opt sel" data-i="0" style="opacity:0;height:0;padding:0"></div></div>`;
+    if (s === 'title') html = `<div class="title-wrap"><div class="logo"><span>FABLE</span><span class="k">KART</span></div><div class="tag">Drift. Boost. Bananas.</div><div class="press">Tap / press <kbd>Enter</kbd> to start</div><div class="opt sel" data-i="0" style="opacity:0;height:0;padding:0"></div></div>`;
     else if (s === 'main') html = `<h1>Main Menu</h1><div class="opts">${opt(0, 'Single Race', 'Pick any track')}${opt(1, 'Grand Prix', 'All 6 tracks, points decide')}${opt(2, 'Balloon Battle', 'Pop their balloons in an arena')}${opt(3, 'Time Trial', 'Solo, no items, chase the clock')}${opt(4, 'How to Play')}</div>`;
     else if (s === 'cc') html = `<h1>Engine Class</h1><div class="opts">${opt(0, '50cc', 'Relaxed')}${opt(1, '100cc', 'Standard')}${opt(2, '150cc', 'Fast and furious')}</div><div class="hint"><kbd>Esc</kbd> back</div>`;
     else if (s === 'chars') {
@@ -53,7 +59,8 @@ export class Menu {
     } else if (s === 'pause') {
       html = `<h1>Paused</h1><div class="opts">${opt(0, 'Resume')}${opt(1, 'Restart Race')}${opt(2, 'Quit to Menu')}</div>`;
     }
-    this.el.innerHTML = `<div class="menu-inner screen-${s}">${html}</div>`;
+    const back = ['cc', 'chars', 'tracks', 'arenas', 'help'].includes(s) ? '<div class="menu-back" data-nav="back">‹ Back</div>' : '';
+    this.el.innerHTML = `<div class="menu-inner screen-${s}">${back}${html}</div>`;
   }
   arenaThumb(a, size = 120) {
     const ext = a.shape === 'circle' ? a.radius : a.half; const sc = (size - 20) / (ext * 2); const P = (v) => (v * sc + size / 2).toFixed(1);

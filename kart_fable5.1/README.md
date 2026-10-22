@@ -24,6 +24,10 @@ Modes: Single Race, Grand Prix (all 6 tracks, MK8 points table), **Balloon Battl
 
 Mouse: left button holds/throws the item, right button throws it backward.
 
+On a phone or tablet the game shows touch controls automatically: the left stick steers, with
+gas, brake, drift, item, rear-view and throw-back buttons on the right. **II** pauses. Tap the title
+screen to start, and use the **‹ Back** button in the top-left of any menu to go back.
+
 ## Mechanics (modelled on Mario Kart 8 Deluxe)
 
 - **Drift / Mini-Turbo** – hop while steering, hold to drift. Charge accrues at 300 units/s when steering ≥ 0.35 into the drift, 160 units/s otherwise (MK8: 5 vs 2 units/frame). Blue sparks at 240, orange at 520, purple at 860. Boost lengths 0.62 s / 1.67 s / 2.63 s (Nintendo’s published MK8D values), scaled by the character’s Mini-Turbo stat. Steering into the drift tightens the arc, steering away opens it; alternating (“waggling”) keeps a wide line while charging fast.

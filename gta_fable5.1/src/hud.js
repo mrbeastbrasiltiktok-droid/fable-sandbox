@@ -80,9 +80,11 @@ export class HUD {
   hitmarker(kind) { this.hit.className = 'hitmarker show ' + kind; this.hitT = 0.25; if (kind === 'kill') this.game.audio.tone(900, 0.08, 0.15, 'square'); else if (kind === 'head') this.game.audio.tone(1400, 0.06, 0.15, 'square'); else this.game.audio.tone(700, 0.04, 0.1, 'square'); }
   showShop(name, items, color) {
     this.shop.style.display = 'block'; this.shop.style.borderColor = color;
-    this.shop.innerHTML = `<h2 style="color:${color}">${name}</h2>` + items.map((it, i) => `<div class="row"><span class="key">${i + 1}</span><span class="name">${it.name}</span><span class="price">${it.price ? formatMoney(it.price) : 'free'}</span></div>`).join('') + `<div class="dim">Press a number to buy · E or Esc to leave</div>`;
+    document.body.classList.add('shop-open');
+    const hint = document.body.classList.contains('touch-mode') ? 'Tap an item to buy · USE to leave' : 'Press a number to buy · E or Esc to leave';
+    this.shop.innerHTML = `<h2 style="color:${color}">${name}</h2>` + items.map((it, i) => `<div class="row"><span class="key">${i + 1}</span><span class="name">${it.name}</span><span class="price">${it.price ? formatMoney(it.price) : 'free'}</span></div>`).join('') + `<div class="dim">${hint}</div>`;
   }
-  hideShop() { this.shop.style.display = 'none'; }
+  hideShop() { this.shop.style.display = 'none'; document.body.classList.remove('shop-open'); }
   speak(ent, text, ms = 2500) {
     for (let i = this.bubbles.length - 1; i >= 0; i--) if (this.bubbles[i].ent === ent) { this.bubbles[i].e.remove(); this.bubbles.splice(i, 1); }
     const e = el('div', 'bubble', this.bubbleLayer, text); this.bubbles.push({ ent, e, t: ms / 1000 });
