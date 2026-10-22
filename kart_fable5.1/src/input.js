@@ -1,6 +1,7 @@
 export class Input {
   constructor() {
     this.keys = new Set(); this.pressed = new Set();
+    this.touchSteer = 0; this.touchThrottle = 0;
     this.override = null; // for debug harness
     window.addEventListener('keydown', (e) => { if (e.repeat) return; this.keys.add(e.code); this.pressed.add(e.code); if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault(); });
     window.addEventListener('keyup', (e) => this.keys.delete(e.code));
@@ -8,10 +9,15 @@ export class Input {
     this.gp = null;
     this.prevGp = {};
     this.mouseL = false; this.mouseLPressed = false; this.mouseRPressed = false;
-    window.addEventListener('pointerdown', (e) => { if (e.target.closest && e.target.closest('.menu')) return; if (e.button === 0) { this.mouseL = true; this.mouseLPressed = true; } if (e.button === 2) this.mouseRPressed = true; });
+    window.addEventListener('pointerdown', (e) => { if (e.target.closest && e.target.closest('.menu, #mobile-controls')) return; if (e.button === 0) { this.mouseL = true; this.mouseLPressed = true; } if (e.button === 2) this.mouseRPressed = true; });
     window.addEventListener('pointerup', (e) => { if (e.button === 0) this.mouseL = false; });
     window.addEventListener('contextmenu', (e) => e.preventDefault());
   }
+  setVirtual(code, down) {
+    if (down) { if (!this.keys.has(code)) this.pressed.add(code); this.keys.add(code); }
+    else this.keys.delete(code);
+  }
+  pressVirtual(code) { this.pressed.add(code); }
   has(...codes) { return codes.some((c) => this.keys.has(c)); }
   hit(...codes) { return codes.some((c) => this.pressed.has(c)); }
   /** Returns a normalized control state for this frame. Call endFrame() after use. */
@@ -22,6 +28,9 @@ export class Input {
     let steer = (this.has('ArrowRight', 'KeyD') ? 1 : 0) - (this.has('ArrowLeft', 'KeyA') ? 1 : 0);
     let throttle = this.has('ArrowUp', 'KeyW') ? 1 : 0;
     let brake = this.has('ArrowDown', 'KeyS') ? 1 : 0;
+    if (Math.abs(this.touchSteer) > 0.04) steer = Math.max(-1, Math.min(1, this.touchSteer));
+    if (this.touchThrottle > 0.18) throttle = 1;
+    if (this.touchThrottle < -0.18) brake = 1;
     let hop = this.has('Space', 'ShiftLeft', 'ShiftRight');
     let hopPressed = this.hit('Space', 'ShiftLeft', 'ShiftRight');
     let itemHeld = this.has('ControlLeft', 'ControlRight', 'KeyE', 'Enter', 'KeyX') || this.mouseL;

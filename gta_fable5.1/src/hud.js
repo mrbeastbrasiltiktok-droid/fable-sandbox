@@ -30,6 +30,7 @@ export class HUD {
     this.bigMap = el('div', 'bigmap', root); const mapRow = el('div', 'map-row', this.bigMap);
     this.bigCanvas = el('canvas', '', mapRow); this.bigCanvas.width = 700; this.bigCanvas.height = 700; this.bctx = this.bigCanvas.getContext('2d');
     this.mapPanel = el('div', 'map-panel', mapRow, ''); this.bigMap.style.display = 'none'; this.mapOpen = false; this.mapT = 0;
+    this.mapClose = el('button', 'map-close', this.bigMap, '✕ CLOSE'); this.mapClose.addEventListener('click', (e) => { e.stopPropagation(); this.toggleMap(); });
     this.help = el('div', 'help', root, `<h2>CONTROLS</h2>
       <div><b>WASD</b> move &nbsp; <b>Shift</b> sprint &nbsp; <b>Space</b> jump / handbrake &nbsp; <b>Mouse</b> look</div>
       <div><b>F</b> enter / exit vehicle (steals occupied cars) &nbsp; <b>LMB</b> fire / punch &nbsp; <b>RMB</b> aim</div>
@@ -40,6 +41,7 @@ export class HUD {
     // always-visible, context-sensitive control strip
     this.controls = el('div', 'controls-bar', root, ''); this.controlsMode = '';
     this.hit = el('div', 'hitmarker', root, ''); this.shop = el('div', 'shop', root, ''); this.shop.style.display = 'none';
+    this.shop.addEventListener('click', (e) => { const row = e.target.closest('.row[data-index]'); if (!row) return; this.game.input.pressed.add('Digit' + (+row.dataset.index + 1)); });
     this.bubbleLayer = el('div', 'bubbles', root); this.bubbles = []; this.hitT = 0;
     this.noticeT = 0; this.bannerT = 0; this.areaT = 0; this.lastArea = ''; this.starFlash = 0; this.moneyShown = 0; this.deltaT = 0; this.deltaSum = 0;
     this.blips = []; this.buildMapImage(); this.damageA = 0;
@@ -80,7 +82,7 @@ export class HUD {
   hitmarker(kind) { this.hit.className = 'hitmarker show ' + kind; this.hitT = 0.25; if (kind === 'kill') this.game.audio.tone(900, 0.08, 0.15, 'square'); else if (kind === 'head') this.game.audio.tone(1400, 0.06, 0.15, 'square'); else this.game.audio.tone(700, 0.04, 0.1, 'square'); }
   showShop(name, items, color) {
     this.shop.style.display = 'block'; this.shop.style.borderColor = color;
-    this.shop.innerHTML = `<h2 style="color:${color}">${name}</h2>` + items.map((it, i) => `<div class="row"><span class="key">${i + 1}</span><span class="name">${it.name}</span><span class="price">${it.price ? formatMoney(it.price) : 'free'}</span></div>`).join('') + `<div class="dim">Press a number to buy · E or Esc to leave</div>`;
+    this.shop.innerHTML = `<h2 style="color:${color}">${name}</h2>` + items.map((it, i) => `<div class="row" data-index="${i}"><span class="key">${i + 1}</span><span class="name">${it.name}</span><span class="price">${it.price ? formatMoney(it.price) : 'free'}</span></div>`).join('') + `<div class="dim">Press a number to buy · E or Esc to leave</div>`;
   }
   hideShop() { this.shop.style.display = 'none'; }
   speak(ent, text, ms = 2500) {

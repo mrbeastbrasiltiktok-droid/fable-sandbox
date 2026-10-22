@@ -9,7 +9,7 @@ export class Menu {
   constructor(root, app) {
     this.app = app; this.el = document.createElement('div'); this.el.className = 'menu'; root.appendChild(this.el);
     this.screen = null; this.sel = 0; this.cc = 150; this.mode = 'race'; this.charIdx = 2; this.trackIdx = 0;
-    this.el.addEventListener('click', (e) => { const b = e.target.closest('[data-i]'); if (b) { this.sel = +b.dataset.i; this.render(); this.confirm(); } const nav = e.target.closest('[data-nav]'); if (nav) this[nav.dataset.nav](); });
+    this.el.addEventListener('click', (e) => { const b = e.target.closest('[data-i]'); if (b) { this.sel = +b.dataset.i; this.render(); this.confirm(); } const nav = e.target.closest('[data-nav]'); if (nav) this[nav.dataset.nav](); if (!b && !nav && this.screen === 'title') this.confirm(); });
     this.el.addEventListener('mousemove', (e) => { const b = e.target.closest('[data-i]'); if (b && +b.dataset.i !== this.sel) { this.sel = +b.dataset.i; this.render(); } });
   }
   show(screen, data) { this.screen = screen; this.data = data; this.sel = screen === 'chars' ? this.charIdx : screen === 'tracks' ? this.trackIdx : 0; this.el.hidden = false; this.render(); }
@@ -53,7 +53,8 @@ export class Menu {
     } else if (s === 'pause') {
       html = `<h1>Paused</h1><div class="opts">${opt(0, 'Resume')}${opt(1, 'Restart Race')}${opt(2, 'Quit to Menu')}</div>`;
     }
-    this.el.innerHTML = `<div class="menu-inner screen-${s}">${html}</div>`;
+    const back = (s === 'cc' || s === 'chars' || s === 'tracks' || s === 'arenas' || s === 'help') ? '<button class="menu-back" data-nav="back">◀ BACK</button>' : '';
+    this.el.innerHTML = `<div class="menu-inner screen-${s}">${html}${back}</div>`;
   }
   arenaThumb(a, size = 120) {
     const ext = a.shape === 'circle' ? a.radius : a.half; const sc = (size - 20) / (ext * 2); const P = (v) => (v * sc + size / 2).toFixed(1);

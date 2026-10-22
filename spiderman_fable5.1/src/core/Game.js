@@ -16,6 +16,7 @@ import { Combat } from '../combat/Combat.js';
 import { Missions } from '../missions/Missions.js';
 import { HUD } from '../ui/HUD.js';
 import { Audio } from '../audio/Audio.js';
+import { MobileControls } from './Mobile.js';
 
 export class Game {
   constructor(canvas) {
@@ -47,6 +48,7 @@ export class Game {
     this.player = new Player(this);
     this.combat = new Combat(this);
     this.missions = new Missions(this);
+    this.mobile = new MobileControls(this);
 
     // Post: subtle bloom for lit windows / web glow
     this.composer = new EffectComposer(this.renderer);
@@ -99,14 +101,14 @@ export class Game {
   start(opts = {}) {
     if (!this._started) { if (opts.fresh) Missions.clearSave(); else if (Missions.hasSave() && this.missions.load()) this.hud.alert('PROGRESS RESTORED', 'gold small'); }
     this.audio.init(); this.audio.resume();
-    this.paused = false; this.hud.show();
+    this.paused = false; this.hud.show(); this.mobile.show();
     this.hud.el.menu.classList.add('hidden');
     if (!this._started) { this._started = true; this.hud.showControls(28); }
     this.input.lock();
     this._last = performance.now();
   }
-  pause() { this.paused = true; this.hud.el.menu.classList.remove('hidden'); this.input.unlock(); }
-  pauseForUI(on) { this.uiPaused = on; if (on) this.input.unlock(); else { this.input.lock(); } }
+  pause() { this.paused = true; this.hud.el.menu.classList.remove('hidden'); this.input.unlock(); this.mobile.hide(); }
+  pauseForUI(on) { this.uiPaused = on; if (on) { this.input.unlock(); this.mobile.hide(); } else { this.input.lock(); this.mobile.show(); } }
 
   hitstop(t) { this.hitstopT = Math.max(this.hitstopT, t); }
   slowmo(t, scale) { this.slowT = Math.max(this.slowT, t); this.slowScale = scale; }

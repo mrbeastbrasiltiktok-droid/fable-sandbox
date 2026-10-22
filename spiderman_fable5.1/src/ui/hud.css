@@ -118,3 +118,72 @@ kbd { font-family: var(--font); font-size: 11px; background: rgba(255,255,255,0.
 #controls-panel .title { font-family: var(--display); font-size: 18px; letter-spacing: 2px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: baseline; }
 #controls-panel .title span { font-family: var(--font); font-size: 10px; opacity: 0.6; letter-spacing: 1px; }
 #controls-panel kbd { min-width: 44px; text-align: center; display: inline-block; margin-right: 8px; }
+
+/* ---------- Touch / mobile ---------- */
+.touch-only { display: none; }
+body.touch-device { touch-action: none; overscroll-behavior: none; -webkit-tap-highlight-color: transparent; }
+body.touch-device .touch-only { display: block; }
+body.touch-device #context, body.touch-device #controls-panel { display: none !important; }
+.mc-root { position: fixed; inset: 0; pointer-events: none; z-index: 20; user-select: none; -webkit-user-select: none; }
+.mc-root.hidden { display: none; }
+.mc-look { position: absolute; right: 0; top: 10%; width: 56%; height: 58%; pointer-events: auto; touch-action: none; }
+.mc-look.active { background: radial-gradient(circle at 55% 55%, rgba(255,255,255,0.07), transparent 65%); }
+.mc-stick { position: absolute; left: calc(16px + env(safe-area-inset-left)); bottom: calc(16px + env(safe-area-inset-bottom)); width: 136px; height: 136px; border-radius: 50%; pointer-events: auto; touch-action: none; background: radial-gradient(circle, rgba(255,255,255,0.09), rgba(0,0,0,0.38)); border: 2px solid rgba(255,255,255,0.32); box-shadow: 0 6px 24px rgba(0,0,0,0.5); z-index: 2; }
+.mc-ring { position: absolute; inset: 24%; border-radius: 50%; border: 1px dashed rgba(255,255,255,0.3); }
+.mc-knob { position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #e0202c 52%, #7c0710); border: 2px solid rgba(255,255,255,0.9); box-shadow: 0 4px 14px rgba(0,0,0,0.6); will-change: transform; }
+.mc-actions { position: absolute; right: calc(14px + env(safe-area-inset-right)); bottom: calc(16px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(3, min(18vw, 70px)); gap: 8px; pointer-events: none; z-index: 2; }
+.mc-btn { pointer-events: auto; touch-action: none; width: min(18vw, 70px); height: min(18vw, 70px); min-width: 0; padding: 0; border-radius: 50%; border: 2px solid rgba(255,255,255,0.55); background: rgba(10,12,24,0.68); color: #fff; font-family: var(--font); font-size: clamp(9px, 2.4vw, 12px); font-weight: 800; letter-spacing: 0.4px; -webkit-tap-highlight-color: transparent; box-shadow: 0 4px 16px rgba(0,0,0,0.5); }
+.mc-btn.down { background: rgba(255,211,58,0.92); color: #111; transform: scale(0.94); }
+.mc-swing { background: rgba(33,67,184,0.85); border-color: #9fb6ff; }
+.mc-attack { background: rgba(190,28,38,0.84); border-color: #ff9aa2; }
+.mc-extra { display: none; }
+.mc-root.more .mc-extra { display: block; }
+.mc-pause { position: absolute; right: calc(12px + env(safe-area-inset-right)); top: calc(126px + env(safe-area-inset-top)); display: flex; flex-direction: column; gap: 6px; pointer-events: none; z-index: 3; }
+.mc-mini { pointer-events: auto; touch-action: none; min-width: 44px; height: 36px; padding: 0 9px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.45); background: rgba(0,0,0,0.58); color: #fff; font-family: var(--font); font-size: 10px; font-weight: 800; letter-spacing: 1px; -webkit-tap-highlight-color: transparent; }
+.mc-mini:active { background: rgba(255,211,58,0.92); color: #111; }
+@media (max-height: 500px) and (pointer: coarse) {
+  .mc-stick { width: 112px; height: 112px; }
+  .mc-knob { width: 46px; height: 46px; margin: -23px 0 0 -23px; }
+  .mc-actions { grid-template-columns: repeat(3, 56px); gap: 6px; }
+  .mc-btn { width: 56px; height: 56px; font-size: 9px; }
+  .mc-mini { height: 30px; min-width: 38px; font-size: 9px; }
+  .mc-look { height: 62%; }
+  .mc-pause { flex-direction: row; top: calc(8px + env(safe-area-inset-top)); right: calc(120px + env(safe-area-inset-right)); }
+  #speed { left: 12px; right: auto; top: calc(84px + env(safe-area-inset-top)); bottom: auto; text-align: left; }
+}
+@media (max-width: 900px), (pointer: coarse) {
+  .menu-card { width: min(680px, 96vw); max-height: 96vh; overflow-y: auto; padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom)); }
+  h1 { font-size: clamp(42px, 12vw, 64px); letter-spacing: 2px; }
+  h2 { font-size: 28px; }
+  .tag { font-size: 14px; margin-bottom: 16px; }
+  button { font-size: 21px; padding: 14px 32px; min-height: 50px; }
+  button.secondary { font-size: 16px; padding: 14px 22px; margin-left: 8px; }
+  .controls { grid-template-columns: 1fr; gap: 5px; margin-top: 16px; font-size: 12px; }
+  .fine { font-size: 11px; margin-top: 14px; }
+  #vitals { left: 12px; bottom: calc(164px + env(safe-area-inset-bottom)); width: 170px; }
+  #mission { left: 12px; top: calc(12px + env(safe-area-inset-top)); max-width: 62vw; padding: 8px 10px; }
+  #mission-title { font-size: 16px; }
+  #mission-desc { font-size: 11px; }
+  #speed { right: 12px; bottom: calc(198px + env(safe-area-inset-bottom)); font-size: 30px; }
+  #speed .unit { font-size: 11px; }
+  #minimap { right: 12px; top: calc(12px + env(safe-area-inset-top)); width: 104px; height: 104px; }
+  #combat-combo { right: 124px; top: 124px; }
+  #combo-num { font-size: 42px; }
+  #alerts { top: 10%; }
+  .alert { font-size: 24px; }
+  .alert.small { font-size: 15px; }
+  .banner h2 { font-size: 36px; }
+  #skills { padding: 12px; overflow-y: auto; }
+  #skill-options { flex-direction: column; gap: 10px; max-height: 76vh; overflow-y: auto; }
+  .skill { width: min(420px, 90vw); padding: 14px 16px; }
+  #hint { bottom: calc(186px + env(safe-area-inset-bottom)); max-width: 86vw; text-align: center; font-size: 11px; }
+}
+
+@media (max-width: 420px) {
+  .mc-stick { width: 112px; height: 112px; }
+  .mc-knob { width: 46px; height: 46px; margin: -23px 0 0 -23px; }
+  .mc-actions { grid-template-columns: repeat(3, 54px); gap: 6px; }
+  .mc-btn { width: 54px; height: 54px; font-size: 9px; }
+  .mc-mini { min-width: 36px; height: 30px; padding: 0 6px; font-size: 9px; }
+  #vitals { bottom: calc(142px + env(safe-area-inset-bottom)); width: 160px; }
+}

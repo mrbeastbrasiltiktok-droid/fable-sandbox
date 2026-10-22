@@ -1,4 +1,5 @@
 // Keyboard + mouse with pointer lock (+ gamepad translated onto the same codes). Exposes held keys, one-frame presses and mouse deltas.
+import { isTouchDevice } from './Mobile.js';
 const GP_BUTTONS = { 0: 'Space', 1: 'KeyQ', 2: 'MouseLeft', 3: 'KeyE', 4: 'KeyR', 5: 'KeyF', 6: 'ShiftLeft', 7: 'MouseRight', 8: 'Tab', 10: 'KeyT', 11: 'KeyV', 12: 'KeyG', 13: 'KeyH', 14: 'Digit1', 15: 'KeyC' };
 export class Input {
   constructor(canvas) {
@@ -8,6 +9,8 @@ export class Input {
     this.mouse = { dx: 0, dy: 0, left: false, right: false, leftPressed: false, rightPressed: false, wheel: 0 };
     this.locked = false;
     this.enabled = false;
+    this.touchMode = isTouchDevice();
+    this.move = { x: 0, y: 0 }; this.moveTouch = false;
 
     window.addEventListener('keydown', (e) => {
       if (e.repeat) return;
@@ -69,9 +72,14 @@ export class Input {
     this._gpPrev = now;
   }
 
-  lock() { this.enabled = true; this._requestLock(); }
+  setVirtual(code, down) {
+    if (down) { if (!this.keys.has(code)) this.pressed.add(code); this.keys.add(code); }
+    else this.keys.delete(code);
+  }
+  pressVirtual(code) { this.pressed.add(code); }
+  lock() { this.enabled = true; if (this.touchMode) { this.locked = true; return; } this._requestLock(); }
   _requestLock() { try { const p = this.canvas.requestPointerLock?.(); if (p && p.catch) p.catch(() => {}); } catch (e) { /* not available (iframe / background) */ } }
-  unlock() { document.exitPointerLock?.(); }
+  unlock() { if (this.touchMode) { this.locked = false; this.keys.clear(); this.mouse.left = this.mouse.right = false; this.move.x = this.move.y = 0; this.moveTouch = false; return; } document.exitPointerLock?.(); }
 
   down(code) { return this.keys.has(code); }
   hit(code) { return this.pressed.has(code); }
@@ -80,6 +88,8 @@ export class Input {
   takeMouse(btn) { const k = btn + 'Pressed'; const h = this.mouse[k]; this.mouse[k] = false; return h; }
   axis(neg, pos) {
     const kb = (this.down(pos) ? 1 : 0) - (this.down(neg) ? 1 : 0);
+    if (this.moveTouch && neg === 'KeyA' && pos === 'KeyD') return this.move.x;
+    if (this.moveTouch && neg === 'KeyS' && pos === 'KeyW') return this.move.y;
     if (kb !== 0 || !this.gpMove) return kb;
     if (neg === 'KeyA') return this.gpMove.x;         // stick x → right positive
     if (neg === 'KeyS') return -this.gpMove.y;        // stick y → forward positive

@@ -134,3 +134,84 @@ table.results i { width: 14px; height: 14px; border-radius: 50%; display: inline
 .hud.battle .hud-lap, .hud.battle .hud-time { display: none; }
 .hud.battle .hud-balloons, .hud.battle .hud-battle-timer, .hud.battle .hud-battle-list { display: block; }
 .thumb.arena svg { }
+
+/* ---------- Touch / mobile ---------- */
+body.touch-device { touch-action: none; overscroll-behavior: none; -webkit-tap-highlight-color: transparent; }
+.mc-root { position: fixed; inset: 0; pointer-events: none; z-index: 20; user-select: none; -webkit-user-select: none; }
+.mc-root.hidden { display: none; }
+.mc-stick { position: absolute; left: calc(16px + env(safe-area-inset-left)); bottom: calc(16px + env(safe-area-inset-bottom)); width: 136px; height: 136px; border-radius: 50%; pointer-events: auto; touch-action: none; background: radial-gradient(circle, rgba(255,255,255,0.1), rgba(0,0,0,0.4)); border: 2px solid rgba(255,255,255,0.35); box-shadow: 0 6px 24px rgba(0,0,0,0.5); z-index: 2; }
+.mc-ring { position: absolute; inset: 24%; border-radius: 50%; border: 1px dashed rgba(255,255,255,0.3); }
+.mc-knob { position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #ffcc33 48%, #b37b00); border: 2px solid rgba(255,255,255,0.9); box-shadow: 0 4px 14px rgba(0,0,0,0.6); will-change: transform; }
+.mc-actions { position: absolute; right: calc(14px + env(safe-area-inset-right)); bottom: calc(16px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(2, min(21vw, 84px)); gap: 8px; pointer-events: none; z-index: 2; }
+.mc-pedal, .mc-btn { pointer-events: auto; touch-action: none; width: min(21vw, 84px); height: min(21vw, 84px); min-width: 0; padding: 0; border-radius: 50%; border: 2px solid rgba(255,255,255,0.6); background: rgba(12,16,28,0.68); color: #fff; font-family: var(--font); font-size: clamp(10px, 2.6vw, 14px); font-weight: 800; letter-spacing: 1px; -webkit-tap-highlight-color: transparent; box-shadow: 0 4px 16px rgba(0,0,0,0.5); }
+.mc-pedal { height: min(18vw, 74px); border-radius: 22px; }
+.mc-gas { background: rgba(54,164,74,0.85); border-color: #9affb0; }
+.mc-brake { background: rgba(190,48,54,0.82); border-color: #ffb0b0; }
+.mc-pedal.down, .mc-btn.down { background: rgba(255,204,51,0.92); color: #1a1030; transform: scale(0.94); }
+.mc-pause { position: absolute; left: 50%; transform: translateX(-50%); top: calc(10px + env(safe-area-inset-top)); display: flex; gap: 6px; pointer-events: none; z-index: 3; }
+.mc-mini { pointer-events: auto; touch-action: none; min-width: 46px; height: 36px; padding: 0 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.45); background: rgba(0,0,0,0.58); color: #fff; font-family: var(--font); font-size: 11px; font-weight: 800; letter-spacing: 1px; -webkit-tap-highlight-color: transparent; }
+.mc-mini:active { background: rgba(255,204,51,0.92); color: #1a1030; }
+@media (max-height: 500px) and (pointer: coarse) {
+  .mc-stick { width: 112px; height: 112px; }
+  .mc-knob { width: 46px; height: 46px; margin: -23px 0 0 -23px; }
+  .mc-actions { grid-template-columns: repeat(2, 60px); gap: 6px; }
+  .mc-pedal, .mc-btn { width: 60px; height: 60px; min-width: 0; padding: 0; font-size: 10px; }
+  .mc-pedal { height: 52px; }
+  .mc-mini { height: 30px; min-width: 40px; font-size: 10px; }
+}
+@media (max-width: 900px), (pointer: coarse) {
+  .menu-inner { width: 100%; max-height: 100%; padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom)); }
+  .menu h1 { font-size: clamp(26px, 7vw, 40px); margin-bottom: 14px; }
+  .logo { font-size: clamp(58px, 15vw, 110px); }
+  .tag { font-size: 16px; margin-top: 12px; letter-spacing: 2px; }
+  .press { margin-top: 28px; font-size: 16px; }
+  .opts { gap: 9px; }
+  .opt { width: min(420px, 92vw); padding: 12px 16px; font-size: 19px; min-height: 48px; justify-content: center; }
+  .opt small { font-size: 12px; }
+  .hint { margin-top: 16px; font-size: 12px; line-height: 1.8; }
+  .chars-wrap { flex-direction: column; min-height: 0; gap: 14px; }
+  .char-grid { grid-template-columns: repeat(3, minmax(78px, 1fr)); width: 100%; gap: 8px; }
+  .char { padding: 8px 4px; }
+  .char .char-dot { width: 34px; height: 34px; margin-bottom: 4px; }
+  .char b { font-size: 14px; }
+  .char small { font-size: 11px; }
+  .char-card { width: min(440px, 94vw); padding: 14px 16px; }
+  .char-card h2 { font-size: 26px; }
+  .stat { grid-template-columns: 78px 1fr 38px; font-size: 13px; margin: 4px 0; }
+  .track-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .track { padding: 8px; }
+  .track .thumb { height: 92px; }
+  .track b { font-size: 16px; }
+  .track p { font-size: 11px; }
+  .help { max-width: 94vw; padding: 14px 16px; font-size: 14px; gap: 7px; }
+  .help b { width: 118px; }
+  table.results { font-size: 16px; }
+  table.results td { padding: 6px 10px; }
+  .hud-pos { left: 14px; top: 8px; }
+  .hud-pos .pos-num { font-size: 66px; }
+  .hud-pos .pos-suf { font-size: 22px; }
+  .hud-lap { left: 16px; top: 86px; font-size: 18px; }
+  .hud-lap b { font-size: 24px; }
+  .hud-item { right: 14px; top: 12px; }
+  .item-ring { width: 74px; height: 74px; border-width: 4px; }
+  .item-icon { font-size: 38px; }
+  .item-name { font-size: 12px; margin-top: 4px; }
+  .hud-coins { right: 14px; top: 120px; font-size: 18px; }
+  .hud-time { right: 14px; top: 148px; }
+  .hud-time .t-main { font-size: 20px; }
+  .hud-time .t-laps { font-size: 11px; }
+  .hud-speed { right: 14px; bottom: calc(184px + env(safe-area-inset-bottom)); width: 150px; }
+  .speed-num { font-size: 40px; }
+  .hud-map { left: 14px; bottom: calc(176px + env(safe-area-inset-bottom)); width: 128px; height: 128px; }
+  .hud-center .track-title { font-size: 38px; }
+  .hud-center .track-title small { font-size: 14px; letter-spacing: 3px; }
+  .count { font-size: 120px; }
+  .hud-msg { font-size: 30px; }
+  .hud-wrong { font-size: 26px; }
+  .hud-standings { min-width: 0; width: 86vw; font-size: 15px; padding: 12px 16px; }
+  .hud-standings div { font-size: 15px; }
+  .hud-battle-timer { font-size: 30px; top: 52px; }
+  .hud-battle-list { right: 12px; top: 148px; min-width: 140px; font-size: 12px; }
+}
+.menu-back { position: absolute; left: max(14px, env(safe-area-inset-left)); top: max(14px, env(safe-area-inset-top)); z-index: 2; padding: 10px 16px; min-height: 44px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.35); background: rgba(0,0,0,0.55); color: #fff; font-family: var(--font); font-size: 15px; font-weight: 800; letter-spacing: 1px; cursor: pointer; }
+.menu-back:active { background: rgba(255,204,51,0.9); color: #1a1030; }

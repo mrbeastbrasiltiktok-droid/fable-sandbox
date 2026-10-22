@@ -3,6 +3,7 @@ import { Input } from './input.js';
 import { Audio } from './audio.js';
 import { HUD } from './hud.js';
 import { Menu } from './menu.js';
+import { MobileControls } from './mobile.js';
 import { Race } from './race.js';
 import { CHARACTERS, buildKart } from './characters.js';
 import { TRACKS, CUP } from './tracks.js';
@@ -22,6 +23,7 @@ class App {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping; this.renderer.toneMappingExposure = 1.05;
     this.renderer.domElement.className = 'gl'; root.appendChild(this.renderer.domElement);
     this.input = new Input(); this.audio = new Audio(); this.hud = new HUD(root); this.menu = new Menu(root, this);
+    this.touch = new MobileControls(this);
     const wake = () => { this.audio.init(); this.audio.resume(); };
     window.addEventListener('keydown', wake); window.addEventListener('pointerdown', wake);
     window.addEventListener('resize', () => { this.renderer.setSize(innerWidth, innerHeight); if (this.race) { this.race.camera.aspect = innerWidth / innerHeight; this.race.camera.updateProjectionMatrix(); } this.showCam.aspect = innerWidth / innerHeight; this.showCam.updateProjectionMatrix(); });
@@ -95,7 +97,7 @@ class App {
     this.race.camera.aspect = innerWidth / innerHeight; this.race.camera.updateProjectionMatrix();
   }
   quitToMenu() { if (this.race) { this.race.dispose(); this.race = null; } this.gp = null; this.paused = false; this.hud.hide(); this.audio.stopMusic(); this.audio.setEngine(0, 0, false, 0, true); this.menu.show('main'); }
-  togglePause() { if (!this.race || this.race.state === 'results') return; this.paused = !this.paused; if (this.paused) { this.menu.show('pause'); this.audio.setEngine(0, 0, false, 0, true); } else this.menu.hide(); }
+  togglePause() { if (!this.race || this.race.state === 'results') return; this.paused = !this.paused; if (this.paused) { this.input.keys.clear(); this.input.touchSteer = 0; this.input.touchThrottle = 0; this.menu.show('pause'); this.audio.setEngine(0, 0, false, 0, true); } else this.menu.hide(); }
   showResults() {
     const r = this.race; const res = r.results; let gp = null;
     if (r.battle) { this.menu.show('results', { battle: true, results: res, trackName: r.trackDef.name }); this.resultsShown = true; this.hud.hide(); return; }
@@ -110,6 +112,7 @@ class App {
     requestAnimationFrame((tt) => this.frame(tt));
     let dt = Math.min(0.1, (t - this.last) / 1000); this.last = t; this.time += dt;
     const inp = this.input.poll();
+    this.touch.sync();
     if (this.menu.screen) this.menu.handleInput(inp);
     else if (inp.pause && this.race) this.togglePause();
     if (this.race && !this.paused && !this.debugManual) {
